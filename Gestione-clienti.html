@@ -1,0 +1,2449 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestione Clienti - Bar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+    :root {
+      --bg-dark: #05030a;
+      --bg-wood: #1f1308;
+      --bg-soft: #111827;
+      --card: #050814;
+      --accent: #fbbf24;
+      --accent-strong: #f59e0b;
+      --accent-soft: rgba(251,191,36,0.18);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --danger: #f97373;
+      --danger-strong: #ef4444;
+      --border-subtle: #312e81;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(145deg, rgba(15,23,42,0.90), rgba(15,23,42,0.90)),
+        url("sfondo-bar.jpg") center center / cover no-repeat fixed;
+      color: var(--text-main);
+      padding: 16px;
+    }
+
+    .app-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    header {
+      margin-bottom: 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(251,191,36,0.18), rgba(248,113,113,0.16)),
+        radial-gradient(circle at top left, rgba(251,191,36,0.35), transparent 55%);
+      border: 1px solid rgba(251,191,36,0.45);
+      box-shadow: 0 18px 45px rgba(15,23,42,0.95);
+      backdrop-filter: blur(16px);
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+    
+  font-family: "Fredoka One", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+    header h1 span.logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 0 5px rgba(251,191,36,0.55);
+    }
+
+    header p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.75);
+      border: 1px solid rgba(148,163,184,0.28);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.35);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.25fr);
+      gap: 16px;
+    }
+
+    .card {
+      background:
+        radial-gradient(circle at top left, rgba(251,191,36,0.06), transparent 55%),
+        var(--card);
+      border-radius: 16px;
+      padding: 14px 16px 14px;
+      border: 1px solid rgba(31,41,55,0.9);
+      box-shadow: 0 10px 35px rgba(15,23,42,0.9);
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(148,163,184,0.18);
+      pointer-events: none;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card h3 {
+      margin: 12px 0 4px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fde68a;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 4px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      background-color: rgba(15,23,42,0.95);
+      color: var(--text-main);
+      min-width: 140px;
+      outline: none;
+      transition: border-color 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(251,191,36,0.75);
+      background-color: #020617;
+    }
+
+    button {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111827;
+      transition:
+        transform 0.05s ease,
+        box-shadow 0.05s ease,
+        background 0.12s ease,
+        opacity 0.08s ease;
+      white-space: nowrap;
+      box-shadow: 0 9px 22px rgba(248,113,113,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(248,113,113,0.85);
+      opacity: 0.97;
+    }
+
+    button:disabled {
+      background: #4b5563;
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+      opacity: 0.75;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), var(--danger-strong));
+      box-shadow: 0 9px 22px rgba(239,68,68,0.6);
+      color: #fef2f2;
+    }
+
+    .btn-danger:hover {
+      box-shadow: 0 14px 30px rgba(239,68,68,0.9);
+    }
+
+    .btn-secondary {
+      background: radial-gradient(circle at top left, #6b7280, #4b5563);
+      box-shadow: 0 9px 22px rgba(55,65,81,0.7);
+      color: #e5e7eb;
+    }
+
+    .tag-pill {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+    }
+
+    .section-divider {
+      margin: 8px 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(148,163,184,0.6), transparent);
+      opacity: 0.8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: #020617;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 6px 6px;
+    }
+
+    th {
+      border-bottom: 1px solid rgba(55,65,81,0.9);
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      background: linear-gradient(to right, rgba(15,23,42,0.95), rgba(15,23,42,0.8));
+    }
+
+    tr:nth-child(even) td { background-color: rgba(15,23,42,0.9); }
+    tr:nth-child(odd)  td { background-color: rgba(15,23,42,0.7); }
+
+    .small {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 4px 0 0;
+    }
+
+    .client-name-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .client-name-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .client-name-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .value-green {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    .value-red {
+      color: #f87171;
+      font-weight: 600;
+    }
+
+    .client-list {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .client-list-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 999px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: rgba(15,23,42,0.9);
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      box-shadow: none;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #e5e7eb;
+    }
+
+    .client-list-item:hover {
+      background: rgba(15,23,42,1);
+      box-shadow: 0 6px 18px rgba(15,23,42,0.8);
+      transform: translateY(-1px);
+    }
+
+    .client-list-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .client-list-name { font-weight: 500; }
+
+    .client-list-amount {
+      font-size: 11px;
+      color: #fca5a5;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .client-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.9);
+    }
+
+    .client-status-credit {
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.35);
+    }
+
+    .client-status-debt {
+      background: #ef4444;
+      box-shadow: 0 0 0 3px rgba(248,113,113,0.35);
+    }
+
+    .client-status-mixed {
+      background: linear-gradient(135deg, #22c55e, #f97316);
+      box-shadow: 0 0 0 3px rgba(251,191,36,0.4);
+    }
+
+    .client-status-neutral {
+      background: #9ca3af;
+      box-shadow: 0 0 0 3px rgba(148,163,184,0.25);
+    }
+
+    .status-message {
+      margin-top: 4px;
+      font-size: 11px;
+      min-height: 14px;
+      color: var(--text-muted);
+    }
+
+    .status-ok { color: #4ade80; }
+    .status-error { color: #f97373; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal {
+      background: #020617;
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.4);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+      max-width: 360px;
+      width: calc(100% - 32px);
+      padding: 14px 16px 12px;
+    }
+
+    .modal-header {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #e5e7eb;
+    }
+
+    .modal-body {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .modal-options {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .modal-option-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 999px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: rgba(15,23,42,0.95);
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #e5e7eb;
+      text-transform: none;
+      letter-spacing: 0;
+      box-shadow: none;
+    }
+
+    .modal-option-btn:hover {
+      background: rgba(15,23,42,1);
+      box-shadow: 0 6px 18px rgba(15,23,42,0.8);
+      transform: translateY(-1px);
+    }
+
+    .modal-option-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-option-name { font-weight: 500; }
+
+    .modal-option-qty {
+      font-size: 11px;
+      color: #a5b4fc;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .modal-footer button { box-shadow: none; }
+
+    /* STORICO CLIENTE */
+    .storico-card {
+      position: fixed;
+      top: 44px;
+      right: 16px;
+      width: 260px;
+      background:
+        radial-gradient(circle at top left, rgba(251,191,36,0.12), transparent 60%),
+        #020617;
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.45);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.95);
+      padding: 10px 12px 10px;
+      z-index: 900;
+      font-size: 12px;
+    }
+
+    .storico-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .storico-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .storico-pill {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .storico-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .storico-row input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .storico-row button {
+      padding: 5px 8px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: none;
+    }
+
+    .storico-content {
+      max-height: 220px;
+      overflow: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .storico-content table {
+      font-size: 11px;
+      border-radius: 10px;
+      margin-top: 4px;
+    }
+
+    .storico-content th,
+    .storico-content td {
+      padding: 4px 5px;
+    }
+
+    .storico-totali {
+      margin-top: 6px;
+      border-top: 1px dashed rgba(148,163,184,0.4);
+      padding-top: 4px;
+      font-size: 11px;
+    }
+
+    .storico-apri-btn {
+      padding: 2px 6px;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: none;
+      margin-left: 4px;
+    }
+
+    /* BOTTONE STORICO */
+    .storico-toggle-btn {
+      position: fixed;
+      top: 12px;
+      right: 16px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.85);
+      z-index: 950;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, opacity 0.08s ease;
+    }
+
+    .storico-toggle-btn:hover {
+      box-shadow: 0 14px 32px rgba(15,23,42,0.95);
+      opacity: 0.95;
+    }
+
+    .storico-toggle-btn.open {
+      background: rgba(30,64,175,0.95);
+    }
+
+    .storico-toggle-icon {
+      display: inline-block;
+      transition: transform 0.12s ease;
+    }
+
+    .storico-toggle-btn.open .storico-toggle-icon {
+      transform: rotate(90deg);
+    }
+
+    .storico-toggle-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .storico-card {
+        position: static;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      header h1 { font-size: 20px; }
+      .card { padding: 12px 12px 13px; }
+      .row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  
+  /* LOGIN SCREEN */
+  .login-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 10% 20%, rgba(30,64,175,0.5), transparent 55%),
+                radial-gradient(circle at 90% 10%, rgba(220,38,38,0.45), transparent 55%),
+                rgba(2,6,23,0.96);
+    z-index: 9999;
+  }
+  .login-card {
+    background: rgba(15,23,42,0.98);
+    border-radius: 20px;
+    padding: 22px 22px 20px 22px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 24px 60px rgba(15,23,42,0.98);
+    border: 1px solid rgba(148,163,184,0.6);
+  }
+  .login-title {
+    font-size: 20px;
+    margin: 0 0 6px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .login-subtitle {
+    font-size: 12px;
+    color: #9ca3af;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .login-field {
+    margin-bottom: 10px;
+  }
+  .login-field label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #e5e7eb;
+  }
+  .login-field input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(148,163,184,0.8);
+    background: rgba(15,23,42,0.96);
+    color: #e5e7eb;
+    font-size: 14px;
+  }
+  .login-field input:focus {
+    outline: none;
+    border-color: rgba(59,130,246,0.9);
+    box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+  }
+  .login-button {
+    width: 100%;
+    margin-top: 6px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background: linear-gradient(135deg, #facc15, #f97316);
+    color: #111827;
+    box-shadow: 0 16px 30px rgba(15,23,42,0.9);
+  }
+  .login-button:hover {
+    filter: brightness(1.05);
+  }
+  .login-error {
+    font-size: 12px;
+    color: #fecaca;
+    background: rgba(185,28,28,0.25);
+    border-radius: 8px;
+    padding: 6px 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  .login-hint {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #9ca3af;
+    text-align: center;
+  }
+
+
+  
+  .reset-all-btn {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(220,38,38,0.92);
+    border: none;
+    color: #f9fafb;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    box-shadow: 0 14px 30px rgba(15,23,42,0.95);
+    z-index: 9999;
+  }
+  .reset-all-btn:hover {
+    filter: brightness(1.05);
+  }
+
+
+</style>
+</head>
+<body>
+  <!-- Freccia + testo Storico -->
+  <button type="button" id="toggleStoricoBtn" class="storico-toggle-btn" aria-label="Mostra/nascondi storico">
+    <span class="storico-toggle-icon">❯</span>
+    <span class="storico-toggle-label">Storico</span>
+  </button>
+
+  <button type="button" id="resetDayBtn" class="reset-all-btn" aria-label="Azzera tutti i dati">
+    Azzera giornata
+  </button>
+
+  
+  <!-- LOGIN INIZIALE -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h1 class="login-title">Gestione Clienti - Accesso</h1>
+      <p class="login-subtitle">Inserisci le credenziali per entrare nel gestionale.</p>
+      <div class="login-field">
+        <label for="loginUser">Username</label>
+        <input type="text" id="loginUser" autocomplete="username" placeholder="es. barista">
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" autocomplete="current-password" placeholder="Password">
+      </div>
+      <div id="loginError" class="login-error" style="display:none;"></div>
+      <button type="button" id="loginButton" class="login-button">Entra</button>
+      <p class="login-hint">Suggerimento: <strong>barista / bar2025</strong></p>
+    </div>
+  </div>
+
+<div class="app-shell" style="display:none;">
+    <header>
+      <h1>
+        <span class="logo-dot"></span>
+        Gestione Clienti
+      </h1>
+      <p>Conti, consumazioni e offerte tra clienti in un’unica schermata.</p>
+      <div class="pill">
+        <span class="pill-dot"></span>
+        <span>Sessione locale • Dati separati per ogni giorno</span>
+      </div>
+    </header>
+
+    <!-- STORICO CLIENTE -->
+    <div class="storico-card" id="storicoCard">
+      <div class="storico-header">
+        <div class="storico-title">Storico Cliente</div>
+        <div class="storico-pill">overview</div>
+      </div>
+      <div class="storico-row">
+        <input
+          type="text"
+          id="storicoNomeInput"
+          list="dbNomiClienti"
+          placeholder="Es. Daniele Colucci">
+        <button type="button" id="storicoMostraBtn">MOSTRA</button>
+      </div>
+      <div id="storicoClienteContent" class="storico-content">
+        <span class="small">Inserisci un nome per vedere lo storico.</span>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- COLONNA SINISTRA -->
+      <div>
+        <div class="card">
+          <h2>
+            Giornata di lavoro
+            <span class="tag-pill">Calendario</span>
+          </h2>
+          <div class="row">
+            <div>
+              <label for="dataGiornata">Data</label>
+              <input type="date" id="dataGiornata">
+            </div>
+          </div>
+        </div>
+
+        <datalist id="dbNomiClienti">
+          <option value="Daniele Colucci"></option>
+          <option value="Andrea Antonelli"></option>
+          <option value="Stefano Colucci"></option>
+          <option value="Roberto Antonelli"></option>
+          <option value="Mario Di Benedetto"></option>
+          <option value="Luigi Caruso"></option>
+          <option value="Nicola Di Benedetto"></option>
+          <option value="Giuseppe Iannone"></option>
+          <option value="Domenico Colucci"></option>
+          <option value="Mauro DI Tella"></option>
+        </datalist>
+
+        <div class="card">
+          <h2>
+            Clienti
+            <span class="tag-pill">Selezione</span>
+          </h2>
+
+          <div class="row">
+            <div>
+              <label for="nomeClienteInput">Nuovo / esistente</label>
+              <input
+                type="text"
+                id="nomeClienteInput"
+                list="dbNomiClienti"
+                placeholder="Digita o scegli dalla lista">
+            </div>
+            <button id="btnAggiungiCliente">Apri scheda</button>
+          </div>
+
+          <h3>Clienti di oggi</h3>
+          <div id="listaClientiGiornata" class="client-list">
+            <span class="small">Nessuna scheda aperta.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLONNA DESTRA -->
+      <div>
+        <div class="card" id="cardDettaglioCliente" style="display:none;">
+          <div class="client-name-wrapper">
+            <div>
+              <div class="client-name-title" id="titoloCliente">CLIENTE</div>
+              <div class="client-name-sub">Scheda cliente</div>
+            </div>
+          </div>
+
+          <h3>Consumazioni avanzate da altri</h3>
+          <div id="avanzateContainer" class="small"></div>
+
+          <h3>Consuma cosa?</h3>
+          <div class="row">
+            <div>
+              <label for="consumaProdottoSelect">Prodotto</label>
+              <select id="consumaProdottoSelect"></select>
+            </div>
+            <button id="btnConsumaProdotto">Consuma</button>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3>Offre a</h3>
+          <div class="row">
+            <div>
+              <label for="offreANomeInput">Nome</label>
+              <input type="text" id="offreANomeInput" list="dbNomiClienti" placeholder="Es. Daniele Colucci">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="offreProdottoSelect">Cosa offre</label>
+              <select id="offreProdottoSelect"></select>
+            </div>
+            <button id="btnConfermaOfferta">Conferma offerta</button>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3>Gestione listino</h3>
+          <div class="row">
+            <div>
+              <label for="nuovoExtraNome">Nuovo articolo</label>
+              <input type="text" id="nuovoExtraNome" placeholder="Es. Amaro Montenegro">
+            </div>
+            <div>
+              <label for="nuovoExtraPrezzo">Prezzo (€)</label>
+              <input type="number" id="nuovoExtraPrezzo" placeholder="2.50" step="0.10" min="0">
+            </div>
+            <button id="btnAggiungiNuovoExtra">+ Aggiungi</button>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3>Riepilogo</h3>
+          <div id="riepilogoContainer" class="small"></div>
+
+          <div id="statusMessage" class="status-message"></div>
+
+          <br>
+          <div class="row">
+            <button id="btnChiudiConto" class="btn-danger">Chiudi conto</button>
+            <button id="btnSvuotaCliente" class="btn-secondary">Svuota scheda</button>
+            <button id="btnUndoOfferta" class="btn-secondary">↩ Indietro</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SCELTA CREDITO (consuma) -->
+  <div id="creditModalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">Da chi scalare la consumazione?</div>
+      <div class="modal-body">
+        <div>Seleziona il cliente da cui vuoi scalare questa consumazione.</div>
+        <div id="creditOptionsContainer" class="modal-options"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="creditCancelBtn" class="btn-secondary">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SCELTA OFFERTA DA ANNULLARE -->
+  <div id="undoOfferModalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">Quale offerta vuoi annullare?</div>
+      <div class="modal-body">
+        <div>Seleziona una delle offerte registrate per questo cliente.</div>
+        <div id="undoOfferOptionsContainer" class="modal-options"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="undoOfferCancelBtn" class="btn-secondary">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL SCELTA MODALITÀ OFFERTA -->
+  <div id="offerChoiceModalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">Come registrare l’offerta?</div>
+      <div class="modal-body">
+        <div>Scegli dove vuoi contabilizzare questa offerta.</div>
+      </div>
+      <div class="modal-options">
+        <button type="button" id="offerOnlyBtn" class="modal-option-btn">
+          <div class="modal-option-main">
+            <span class="modal-option-name">Solo conto da pagare</span>
+          </div>
+        </button>
+        <button type="button" id="offerBothBtn" class="modal-option-btn">
+          <div class="modal-option-main">
+            <span class="modal-option-name">Conto + avanzate del destinatario</span>
+          </div>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="offerCancelBtn" class="btn-secondary">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    const PREZZI_BIRRA = {
+      "0.2": 1.50,
+      "0.3": 2.20,
+      "0.4": 3.00
+    };
+
+    const EXTRA_DEFAULT = [
+      { nome: "Patatine", prezzo: 1.50 },
+      { nome: "Campari", prezzo: 2.00 },
+      { nome: "Cetrata", prezzo: 2.00 },
+      { nome: "Succo di Frutta", prezzo: 1.80 },
+      { nome: "Caffè", prezzo: 1.00 }
+    ];
+
+    const STORAGE_PREFIX = "gestioneBar_state_v15_";
+    let currentUserKey = "default";
+
+    function getStoragePrefix() {
+      return STORAGE_PREFIX + currentUserKey + "_";
+    }
+
+    let currentDateStr = null;
+    let clienti = [];
+    let extraArticoli = [];
+    let currentClienteId = null;
+
+    // log delle offerte (per annullare singole offerte)
+    let offerteLog = [];
+
+    function genId() {
+      return Date.now().toString(36) + Math.random().toString(16).slice(2);
+    }
+
+    function getTodayISO() {
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function normalizeCliente(c) {
+      if (!c || typeof c !== "object") c = {};
+      if (!c.id) c.id = genId();
+      if (!c.nome) c.nome = "Senza nome";
+      if (!Array.isArray(c.avanzate)) c.avanzate = [];
+      if (!Array.isArray(c.extraDettaglio)) c.extraDettaglio = [];
+      if (typeof c.contoExtraEuro !== "number") c.contoExtraEuro = 0;
+      return c;
+    }
+
+    function saveState() {
+      if (!currentDateStr) return;
+      try {
+        const state = {
+          clienti,
+          extraArticoli,
+          offerteLog
+        };
+        localStorage.setItem(getStoragePrefix() + currentDateStr, JSON.stringify(state));
+      } catch (e) {
+        console.warn("Impossibile salvare lo stato:", e);
+      }
+    }
+
+    function loadStateForDate(dateStr) {
+      currentDateStr = dateStr;
+      clienti = [];
+      extraArticoli = [];
+      offerteLog = [];
+      currentClienteId = null;
+
+      try {
+        const raw = localStorage.getItem(getStoragePrefix() + dateStr);
+        if (!raw) {
+          extraArticoli = [...EXTRA_DEFAULT];
+          offerteLog = [];
+          return;
+        }
+        const state = JSON.parse(raw);
+
+        if (Array.isArray(state.clienti)) {
+          state.clienti.forEach(c => clienti.push(normalizeCliente(c)));
+        }
+
+        if (Array.isArray(state.extraArticoli) && state.extraArticoli.length > 0) {
+          extraArticoli = state.extraArticoli;
+        } else {
+          extraArticoli = [...EXTRA_DEFAULT];
+        }
+
+        if (Array.isArray(state.offerteLog)) {
+          offerteLog = state.offerteLog;
+        } else {
+          offerteLog = [];
+        }
+      } catch (e) {
+        console.warn("Errore nel caricamento dello stato per la data", dateStr, e);
+        extraArticoli = [...EXTRA_DEFAULT];
+        offerteLog = [];
+      }
+    }
+
+    function getAllSavedDates() {
+      const dates = [];
+      const prefix = getStoragePrefix();
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(prefix)) {
+          const dateStr = key.substring(prefix.length);
+          dates.push(dateStr);
+        }
+      }
+      dates.sort();
+      return dates;
+    }
+
+    function aggiungiAlDatalistClienti(nome) {
+      const dl = document.getElementById("dbNomiClienti");
+      if (!dl) return;
+      const esiste = Array.from(dl.options).some(opt => opt.value === nome);
+      if (!esiste) {
+        const opt = document.createElement("option");
+        opt.value = nome;
+        dl.appendChild(opt);
+      }
+    }
+
+    function creaCliente(nome) {
+      const esistente = clienti.find(c => c.nome === nome);
+      if (esistente) return esistente;
+
+      const cliente = normalizeCliente({
+        id: genId(),
+        nome,
+        avanzate: [],
+        extraDettaglio: [],
+        contoExtraEuro: 0
+      });
+      clienti.push(cliente);
+      aggiungiAlDatalistClienti(nome);
+      saveState();
+      aggiornaListaClienti();
+      return cliente;
+    }
+
+    function trovaCliente(idCliente) {
+      return clienti.find(c => c.id === idCliente);
+    }
+
+    function trovaClientePerNome(nome) {
+      return clienti.find(c => c.nome === nome);
+    }
+
+    function aggiungiAlContoExtra(cliente, importo, descrizione) {
+      if (importo <= 0 || isNaN(importo)) return;
+      if (!Array.isArray(cliente.extraDettaglio)) cliente.extraDettaglio = [];
+      cliente.extraDettaglio.push({
+        descrizione: descrizione || "Extra",
+        prezzo: importo
+      });
+      cliente.contoExtraEuro = cliente.extraDettaglio.reduce((s, x) => s + (x.prezzo || 0), 0);
+      saveState();
+      aggiornaListaClienti();
+    }
+
+    function svuotaCliente(cliente) {
+      cliente.contoExtraEuro = 0;
+      cliente.avanzate = [];
+      cliente.extraDettaglio = [];
+      saveState();
+      aggiornaListaClienti();
+    }
+
+    function rimuoviClienteSeVuoto(cliente) {
+      const hasCrediti = Array.isArray(cliente.avanzate) &&
+        cliente.avanzate.some(e => (e.quantita || 0) > 0);
+      const hasExtra = Array.isArray(cliente.extraDettaglio) &&
+        cliente.extraDettaglio.length > 0;
+      const debito = cliente.contoExtraEuro || 0;
+
+      if (!hasCrediti && !hasExtra && debito === 0) {
+        const idx = clienti.findIndex(c => c.id === cliente.id);
+        if (idx !== -1) {
+          clienti.splice(idx, 1);
+          saveState();
+        }
+        if (currentClienteId === cliente.id) {
+          currentClienteId = null;
+          cardDettaglioCliente.style.display = "none";
+          riepilogoContainer.innerHTML = "";
+          avanzateContainer.innerHTML = "";
+        }
+        aggiornaListaClienti();
+      }
+    }
+
+    /* ---------- MODALE CREDITI (consuma) ---------- */
+
+    const creditModalOverlay = document.getElementById("creditModalOverlay");
+    const creditOptionsContainer = document.getElementById("creditOptionsContainer");
+    const creditCancelBtn = document.getElementById("creditCancelBtn");
+
+    let creditModalResolve = null;
+    let creditModalCliente = null;
+    let creditModalOptions = null;
+
+    function openCreditModal(cliente, possibili) {
+      creditModalCliente = cliente;
+      creditModalOptions = possibili;
+      creditOptionsContainer.innerHTML = "";
+
+      possibili.forEach((entry, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "modal-option-btn";
+        btn.innerHTML = `
+          <div class="modal-option-main">
+            <span class="modal-option-name">${entry.from}</span>
+            <span class="modal-option-qty">${entry.quantita} disponibili</span>
+          </div>
+          <span class="modal-option-qty">≈ € ${(entry.quantita * (entry.prezzoUnitario || 0)).toFixed(2)}</span>
+        `;
+        btn.addEventListener("click", () => handleCreditChoice(idx));
+        creditOptionsContainer.appendChild(btn);
+      });
+
+      creditModalOverlay.style.display = "flex";
+
+      return new Promise(resolve => {
+        creditModalResolve = resolve;
+      });
+    }
+
+    function closeCreditModal() {
+      creditModalOverlay.style.display = "none";
+      creditOptionsContainer.innerHTML = "";
+      creditModalResolve = null;
+      creditModalCliente = null;
+      creditModalOptions = null;
+    }
+
+    function handleCreditChoice(index) {
+      if (!creditModalResolve || !creditModalCliente || !creditModalOptions) return;
+      const entry = creditModalOptions[index];
+      entry.quantita -= 1;
+      const from = entry.from;
+
+      if (entry.quantita <= 0) {
+        creditModalCliente.avanzate = creditModalCliente.avanzate.filter(e => e !== entry);
+      }
+
+      saveState();
+      aggiornaListaClienti();
+
+      if (currentClienteId === creditModalCliente.id) {
+        aggiornaAvanzate(creditModalCliente);
+        aggiornaRiepilogo(creditModalCliente);
+      }
+
+      closeCreditModal();
+      creditModalResolve({ usato: true, from });
+    }
+
+    creditCancelBtn.addEventListener("click", () => {
+      if (creditModalResolve) {
+        creditModalResolve({ usato: false });
+      }
+      closeCreditModal();
+    });
+
+    async function consumaDaCreditoAsync(cliente, tipo, chiave) {
+      if (!Array.isArray(cliente.avanzate)) return { usato: false };
+
+      const possibili = cliente.avanzate.filter(e =>
+        e.tipo === tipo &&
+        ((tipo === "birra" && e.misura === chiave) ||
+         (tipo === "extra" && e.descrizione === chiave)) &&
+        e.quantita > 0
+      );
+
+      if (possibili.length === 0) return { usato: false };
+
+      if (possibili.length === 1) {
+        const entry = possibili[0];
+        entry.quantita -= 1;
+        const from = entry.from;
+        if (entry.quantita <= 0) {
+          cliente.avanzate = cliente.avanzate.filter(e => e !== entry);
+        }
+        saveState();
+        aggiornaListaClienti();
+        if (currentClienteId === cliente.id) {
+          aggiornaAvanzate(cliente);
+          aggiornaRiepilogo(cliente);
+        }
+        return { usato: true, from };
+      }
+
+      const result = await openCreditModal(cliente, possibili);
+      if (!result || !result.usato) return { usato: false };
+      return result;
+    }
+
+    /* ---------- LOG OFFERTE + ANNULLA OFFERTA ---------- */
+
+    const undoOfferModalOverlay = document.getElementById("undoOfferModalOverlay");
+    const undoOfferOptionsContainer = document.getElementById("undoOfferOptionsContainer");
+    const undoOfferCancelBtn = document.getElementById("undoOfferCancelBtn");
+
+    function openUndoOfferModal(payer) {
+      const offerteCliente = offerteLog.filter(o => o.payerId === payer.id);
+      if (offerteCliente.length === 0) {
+        setStatusMessage("Nessuna offerta da annullare per questo cliente.", "error");
+        return;
+      }
+
+      undoOfferOptionsContainer.innerHTML = "";
+
+      offerteCliente.forEach(off => {
+        let prodottoLabel = "";
+        if (off.tipo === "birra") {
+          let label;
+          if (off.misura === "0.2") label = "0,2 L";
+          else if (off.misura === "0.3") label = "0,3 L";
+          else label = "0,4 L";
+          prodottoLabel = `Birra ${label}`;
+        } else {
+          prodottoLabel = off.extraNome || "Extra";
+        }
+
+        const destLabel = off.destinatarioNome
+          ? `a ${off.destinatarioNome}`
+          : "al banco";
+
+        const ora = off.timestamp
+          ? new Date(off.timestamp).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })
+          : "";
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "modal-option-btn";
+        btn.innerHTML = `
+          <div class="modal-option-main">
+            <span class="modal-option-name">${prodottoLabel}</span>
+            <span class="modal-option-qty">${destLabel}</span>
+          </div>
+          <span class="modal-option-qty">€ ${off.prezzo.toFixed(2)}${ora ? " • " + ora : ""}</span>
+        `;
+        btn.addEventListener("click", () => {
+          annullaOfferta(off);
+          chiudiUndoOfferModal();
+        });
+        undoOfferOptionsContainer.appendChild(btn);
+      });
+
+      undoOfferModalOverlay.style.display = "flex";
+    }
+
+    function chiudiUndoOfferModal() {
+      undoOfferModalOverlay.style.display = "none";
+      undoOfferOptionsContainer.innerHTML = "";
+    }
+
+    undoOfferCancelBtn.addEventListener("click", () => {
+      chiudiUndoOfferModal();
+    });
+
+    function annullaOfferta(offer) {
+      // trova payer e destinatario attuali
+      const payer = trovaCliente(offer.payerId) || trovaClientePerNome(offer.payerNome);
+      let destinatario = null;
+      if (offer.destinatarioNome) {
+        destinatario =
+          (offer.destinatarioId && trovaCliente(offer.destinatarioId)) ||
+          trovaClientePerNome(offer.destinatarioNome);
+      }
+
+      // rimuove addebito dal payer
+      if (payer && Array.isArray(payer.extraDettaglio)) {
+        let descrAttesa;
+        if (offer.tipo === "birra") {
+          const baseDescr = `Birra ${offer.misura.replace(".", ",")} L`;
+          descrAttesa = offer.destinatarioNome
+            ? `${baseDescr} (offerta a ${offer.destinatarioNome})`
+            : baseDescr;
+        } else {
+          const baseDescr = offer.extraNome || "Extra";
+          descrAttesa = offer.destinatarioNome
+            ? `${baseDescr} (offerto a ${offer.destinatarioNome})`
+            : baseDescr;
+        }
+
+        const idxExtra = payer.extraDettaglio.findIndex(
+          x => x.descrizione === descrAttesa && x.prezzo === offer.prezzo
+        );
+        if (idxExtra !== -1) {
+          payer.extraDettaglio.splice(idxExtra, 1);
+          payer.contoExtraEuro = payer.extraDettaglio.reduce((s, x) => s + (x.prezzo || 0), 0);
+        }
+      }
+
+      // rimuove credito dal destinatario (se c'è)
+      if (destinatario && Array.isArray(destinatario.avanzate)) {
+        const idxCred = destinatario.avanzate.findIndex(e =>
+          e.from === offer.payerNome &&
+          e.tipo === offer.tipo &&
+          ((offer.tipo === "birra" && e.misura === offer.misura) ||
+           (offer.tipo === "extra" && e.descrizione === (offer.extraNome || e.descrizione))) &&
+          e.prezzoUnitario === offer.prezzo &&
+          (e.quantita || 0) > 0
+        );
+        if (idxCred !== -1) {
+          const entry = destinatario.avanzate[idxCred];
+          entry.quantita -= 1;
+          if (entry.quantita <= 0) {
+            destinatario.avanzate.splice(idxCred, 1);
+          }
+        }
+      }
+
+      // rimuove l'offerta dal log
+      const idxLog = offerteLog.findIndex(o => o.id === offer.id);
+      if (idxLog !== -1) {
+        offerteLog.splice(idxLog, 1);
+      }
+
+      saveState();
+      aggiornaListaClienti();
+
+      if (currentClienteId) {
+        const cli = trovaCliente(currentClienteId);
+        if (cli) {
+          mostraDettaglioCliente(cli);
+        } else {
+          mostraDettaglioCliente(null);
+        }
+      }
+
+      setStatusMessage("Offerta annullata.", "ok");
+    }
+
+    function registraOffertaBirra(payer, destinatarioNome, misura) {
+      const prezzo = PREZZI_BIRRA[misura];
+      if (!prezzo) return;
+
+      const baseDescr = `Birra ${misura.replace(".", ",")} L`;
+
+      let destinatario = null;
+      if (destinatarioNome) {
+        aggiungiAlDatalistClienti(destinatarioNome);
+        destinatario = trovaClientePerNome(destinatarioNome);
+        if (!destinatario) {
+          destinatario = creaCliente(destinatarioNome);
+          aggiornaProdottoSelects();
+        }
+      }
+
+      if (!destinatarioNome) {
+        aggiungiAlContoExtra(payer, prezzo, baseDescr);
+      } else {
+        const descrPayer = `${baseDescr} (offerta a ${destinatarioNome})`;
+        aggiungiAlContoExtra(payer, prezzo, descrPayer);
+
+        destinatario.avanzate = destinatario.avanzate || [];
+        destinatario.avanzate.push({
+          from: payer.nome,
+          tipo: "birra",
+          misura,
+          descrizione: baseDescr,
+          quantita: 1,
+          prezzoUnitario: prezzo
+        });
+        saveState();
+        aggiornaListaClienti();
+        if (currentClienteId === destinatario.id) {
+          aggiornaAvanzate(destinatario);
+          aggiornaRiepilogo(destinatario);
+        }
+      }
+
+      // registra nel log
+      offerteLog.push({
+        id: genId(),
+        payerId: payer.id,
+        payerNome: payer.nome,
+        destinatarioId: destinatario ? destinatario.id : null,
+        destinatarioNome: destinatarioNome || null,
+        tipo: "birra",
+        misura,
+        extraNome: null,
+        prezzo,
+        timestamp: Date.now()
+      });
+
+      saveState();
+    }
+
+    function registraOffertaExtra(payer, destinatarioNome, descrizioneBase, prezzo) {
+      if (!prezzo || isNaN(prezzo)) return;
+
+      let destinatario = null;
+      if (destinatarioNome) {
+        aggiungiAlDatalistClienti(destinatarioNome);
+        destinatario = trovaClientePerNome(destinatarioNome);
+        if (!destinatario) {
+          destinatario = creaCliente(destinatarioNome);
+          aggiornaProdottoSelects();
+        }
+      }
+
+      if (!destinatarioNome) {
+        aggiungiAlContoExtra(payer, prezzo, descrizioneBase);
+      } else {
+        const descrPayer = `${descrizioneBase} (offerto a ${destinatarioNome})`;
+        aggiungiAlContoExtra(payer, prezzo, descrPayer);
+
+        destinatario.avanzate = destinatario.avanzate || [];
+        destinatario.avanzate.push({
+          from: payer.nome,
+          tipo: "extra",
+          descrizione: descrizioneBase,
+          quantita: 1,
+          prezzoUnitario: prezzo
+        });
+        saveState();
+        aggiornaListaClienti();
+        if (currentClienteId === destinatario.id) {
+          aggiornaAvanzate(destinatario);
+          aggiornaRiepilogo(destinatario);
+        }
+      }
+
+      // registra nel log
+      offerteLog.push({
+        id: genId(),
+        payerId: payer.id,
+        payerNome: payer.nome,
+        destinatarioId: destinatario ? destinatario.id : null,
+        destinatarioNome: destinatarioNome || null,
+        tipo: "extra",
+        misura: null,
+        extraNome: descrizioneBase,
+        prezzo,
+        timestamp: Date.now()
+      });
+
+      saveState();
+    }
+
+    /* ---------- DOM ELEMENTS ---------- */
+
+    const dataGiornataInput = document.getElementById("dataGiornata");
+    const nomeClienteInput = document.getElementById("nomeClienteInput");
+    const btnAggiungiCliente = document.getElementById("btnAggiungiCliente");
+    const listaClientiGiornata = document.getElementById("listaClientiGiornata");
+
+    const cardDettaglioCliente = document.getElementById("cardDettaglioCliente");
+    const titoloCliente = document.getElementById("titoloCliente");
+    const avanzateContainer = document.getElementById("avanzateContainer");
+    const riepilogoContainer = document.getElementById("riepilogoContainer");
+
+    const nuovoExtraNome = document.getElementById("nuovoExtraNome");
+    const nuovoExtraPrezzo = document.getElementById("nuovoExtraPrezzo");
+    const btnAggiungiNuovoExtra = document.getElementById("btnAggiungiNuovoExtra");
+
+    const offreANomeInput = document.getElementById("offreANomeInput");
+    const offreProdottoSelect = document.getElementById("offreProdottoSelect");
+    const btnConfermaOfferta = document.getElementById("btnConfermaOfferta");
+
+    const consumaProdottoSelect = document.getElementById("consumaProdottoSelect");
+    const btnConsumaProdotto = document.getElementById("btnConsumaProdotto");
+
+    const btnChiudiConto = document.getElementById("btnChiudiConto");
+    const btnSvuotaCliente = document.getElementById("btnSvuotaCliente");
+    const btnUndoOfferta = document.getElementById("btnUndoOfferta");
+
+    const statusMessageEl = document.getElementById("statusMessage");
+
+    const storicoNomeInput = document.getElementById("storicoNomeInput");
+    const storicoMostraBtn = document.getElementById("storicoMostraBtn");
+    const storicoClienteContent = document.getElementById("storicoClienteContent");
+
+    const toggleStoricoBtn = document.getElementById("toggleStoricoBtn");
+    const storicoCard = document.getElementById("storicoCard");
+    const resetDayBtn = document.getElementById("resetDayBtn");
+    const loginScreen = document.getElementById("loginScreen");
+    const loginUser = document.getElementById("loginUser");
+    const loginPass = document.getElementById("loginPass");
+    const loginButton = document.getElementById("loginButton");
+    const loginError = document.getElementById("loginError");
+    const appShell = document.querySelector(".app-shell");
+
+    // Utenti autorizzati (puoi aggiungerne altri)
+    const USERS = [
+      { user: "Bardellosport", pass: "Danielino227!" },
+      { user: "Ritornobar", pass: "Danielino227!" },
+      { user: "Alcentralebar", pass: "Danielino227!" }
+    ];
+
+    function eseguiLogin() {
+      const u = (loginUser.value || "").trim();
+      const p = loginPass.value || "";
+
+      const trovato = USERS.some(acc => acc.user === u && acc.pass === p);
+
+      if (trovato) {
+        // imposta l'utente corrente per separare i dati
+        currentUserKey = u || "default";
+
+        // ricarica la giornata per questo utente
+        const today = getTodayISO();
+        if (dataGiornataInput) dataGiornataInput.value = today;
+        initDay(today);
+
+        if (loginError) loginError.style.display = "none";
+        if (loginScreen) loginScreen.style.display = "none";
+        if (appShell) appShell.style.display = "block";
+      } else {
+        if (loginError) {
+          loginError.textContent = "Credenziali non valide. Riprova.";
+          loginError.style.display = "block";
+        }
+      }
+    }
+
+    if (loginButton) {
+      loginButton.addEventListener("click", eseguiLogin);
+    }
+    if (loginPass) {
+      loginPass.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") eseguiLogin();
+      });
+    }
+
+    const offerChoiceModalOverlay = document.getElementById("offerChoiceModalOverlay");
+    const offerOnlyBtn = document.getElementById("offerOnlyBtn");
+    const offerBothBtn = document.getElementById("offerBothBtn");
+    const offerCancelBtn = document.getElementById("offerCancelBtn");
+
+    let statusTimeoutId = null;
+
+    function setStatusMessage(text, type = "ok") {
+      if (!statusMessageEl) return;
+      statusMessageEl.textContent = text || "";
+      statusMessageEl.classList.remove("status-ok", "status-error");
+      if (text) {
+        if (type === "ok") statusMessageEl.classList.add("status-ok");
+        if (type === "error") statusMessageEl.classList.add("status-error");
+      }
+      if (statusTimeoutId) clearTimeout(statusTimeoutId);
+      if (text) {
+        statusTimeoutId = setTimeout(() => {
+          statusMessageEl.textContent = "";
+          statusMessageEl.classList.remove("status-ok", "status-error");
+        }, 3000);
+      }
+    }
+
+    function calcolaStatoCliente(cliente) {
+      let hasCredito = Array.isArray(cliente.avanzate) &&
+        cliente.avanzate.some(e => (e.quantita || 0) > 0);
+
+      let debito = 0;
+      if (Array.isArray(cliente.extraDettaglio)) {
+        debito = cliente.extraDettaglio.reduce((s, x) => s + (x.prezzo || 0), 0);
+      }
+      cliente.contoExtraEuro = debito;
+      let hasDebito = debito > 0;
+
+      return { hasCredito, hasDebito, debito };
+    }
+
+    function aggiornaListaClienti() {
+      if (!listaClientiGiornata) return;
+      if (!Array.isArray(clienti) || clienti.length === 0) {
+        listaClientiGiornata.innerHTML = "<span class='small'>Nessuna scheda aperta.</span>";
+        return;
+      }
+
+      const sorted = [...clienti].sort((a, b) =>
+        a.nome.localeCompare(b.nome, "it", { sensitivity: "base" })
+      );
+
+      let html = "";
+      sorted.forEach(c => {
+        const stato = calcolaStatoCliente(c);
+        let dotClass = "client-status-neutral";
+        let amountText = "";
+
+        if (stato.hasCredito && !stato.hasDebito) dotClass = "client-status-credit";
+        else if (!stato.hasCredito && stato.hasDebito) dotClass = "client-status-debt";
+        else if (stato.hasCredito && stato.hasDebito) dotClass = "client-status-mixed";
+
+        if (stato.hasDebito) amountText = "€ " + stato.debito.toFixed(2);
+
+        html += `
+          <button type="button" class="client-list-item" data-id="${c.id}">
+            <div class="client-list-main">
+              <span class="client-status-dot ${dotClass}"></span>
+              <span class="client-list-name">${c.nome}</span>
+            </div>
+            <span class="client-list-amount">${amountText}</span>
+          </button>
+        `;
+      });
+
+      listaClientiGiornata.innerHTML = html;
+
+      listaClientiGiornata.querySelectorAll(".client-list-item").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          const cliente = trovaCliente(id);
+          if (!cliente) return;
+          currentClienteId = cliente.id;
+          resetCampiUI();
+          mostraDettaglioCliente(cliente);
+        });
+      });
+    }
+
+    function popolaSelectProdotti(selectEl) {
+      if (!selectEl) return;
+      selectEl.innerHTML = "";
+
+      [["0.2","0,2 L"],["0.3","0,3 L"],["0.4","0,4 L"]].forEach(([misura,label]) => {
+        const prezzo = PREZZI_BIRRA[misura];
+        const opt = document.createElement("option");
+        opt.value = `birra:${misura}`;
+        opt.textContent = `Birra ${label} - ${prezzo.toFixed(2)} €`;
+        selectEl.appendChild(opt);
+      });
+
+      if (extraArticoli.length > 0) {
+        const optSep = document.createElement("option");
+        optSep.disabled = true;
+        optSep.textContent = "────────────";
+        selectEl.appendChild(optSep);
+      }
+
+      extraArticoli.forEach((articolo, index) => {
+        const opt = document.createElement("option");
+        opt.value = `extra:${index}`;
+        opt.textContent = `${articolo.nome} - ${articolo.prezzo.toFixed(2)} €`;
+        selectEl.appendChild(opt);
+      });
+
+      if (selectEl.options.length > 0) selectEl.selectedIndex = 0;
+    }
+
+    function aggiornaProdottoSelects() {
+      popolaSelectProdotti(offreProdottoSelect);
+      popolaSelectProdotti(consumaProdottoSelect);
+    }
+
+    function resetCampiUI() {
+      nuovoExtraNome.value = "";
+      nuovoExtraPrezzo.value = "";
+      offreANomeInput.value = "";
+      if (offreProdottoSelect && offreProdottoSelect.options.length > 0) {
+        offreProdottoSelect.selectedIndex = 0;
+      }
+      if (consumaProdottoSelect && consumaProdottoSelect.options.length > 0) {
+        consumaProdottoSelect.selectedIndex = 0;
+      }
+      setStatusMessage("");
+      if (btnConsumaProdotto) btnConsumaProdotto.disabled = true;
+    }
+
+    function aggiornaAvanzate(cliente) {
+      if (!cliente || !Array.isArray(cliente.avanzate) || cliente.avanzate.length === 0) {
+        avanzateContainer.innerHTML = "<em>Nessuna consumazione avanzata al momento.</em>";
+        return;
+      }
+
+      let html = '<table>';
+      html += '<thead><tr><th>Da chi</th><th>Prodotto</th><th>Q.tà</th><th>Valore</th><th></th></tr></thead><tbody>';
+
+      cliente.avanzate.forEach((entry, index) => {
+        const valore = entry.quantita * (entry.prezzoUnitario || 0);
+        html += `<tr>
+          <td>${entry.from}</td>
+          <td>${entry.descrizione}</td>
+          <td>${entry.quantita}</td>
+          <td>${valore.toFixed(2)} €</td>
+          <td><button class="btnRimuoviAvanza" data-index="${index}">x</button></td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+      avanzateContainer.innerHTML = html;
+
+      avanzateContainer.querySelectorAll(".btnRimuoviAvanza").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const cli = trovaCliente(currentClienteId);
+          if (!cli) return;
+          const idx = parseInt(btn.getAttribute("data-index"), 10);
+          if (!isNaN(idx)) {
+            cli.avanzate.splice(idx, 1);
+            saveState();
+            aggiornaAvanzate(cli);
+            aggiornaRiepilogo(cli);
+            aggiornaListaClienti();
+          }
+        });
+      });
+    }
+
+    function mostraDettaglioCliente(cliente) {
+      if (!cliente) {
+        cardDettaglioCliente.style.display = "none";
+        riepilogoContainer.innerHTML = "";
+        avanzateContainer.innerHTML = "";
+        if (btnConsumaProdotto) btnConsumaProdotto.disabled = true;
+        return;
+      }
+
+      cardDettaglioCliente.style.display = "block";
+      titoloCliente.textContent = cliente.nome;
+      aggiornaAvanzate(cliente);
+      aggiornaRiepilogo(cliente);
+    }
+
+    function aggiornaRiepilogo(cliente) {
+      if (!cliente) {
+        riepilogoContainer.innerHTML = "<em>Nessun cliente selezionato.</em>";
+        if (btnConsumaProdotto) btnConsumaProdotto.disabled = true;
+        return;
+      }
+
+      let totAvanzateQ = 0;
+      let totAvanzateVal = 0;
+      if (Array.isArray(cliente.avanzate)) {
+        cliente.avanzate.forEach(entry => {
+          const q = entry.quantita || 0;
+          const v = entry.prezzoUnitario || 0;
+          totAvanzateQ += q;
+          totAvanzateVal += q * v;
+        });
+      }
+
+      let totExtra = 0;
+      if (Array.isArray(cliente.extraDettaglio)) {
+        totExtra = cliente.extraDettaglio.reduce((s, x) => s + (x.prezzo || 0), 0);
+      }
+      cliente.contoExtraEuro = totExtra;
+
+      let html = "";
+
+      html += `<p><strong>Crediti ancora da consumare:</strong> 
+        <span class="value-green">${totAvanzateQ} (≈ € ${totAvanzateVal.toFixed(2)})</span></p>`;
+
+      if (Array.isArray(cliente.avanzate) && cliente.avanzate.length > 0) {
+        const mappa = {};
+        cliente.avanzate.forEach(entry => {
+          const key = entry.descrizione;
+          if (!mappa[key]) {
+            mappa[key] = { quantita: 0, totale: 0 };
+          }
+          mappa[key].quantita += entry.quantita || 0;
+          mappa[key].totale += (entry.quantita || 0) * (entry.prezzoUnitario || 0);
+        });
+
+        html += '<table><thead><tr><th>Prodotto</th><th>Q.tà</th><th>Valore</th></tr></thead><tbody>';
+        Object.keys(mappa).forEach(desc => {
+          const info = mappa[desc];
+          html += `<tr>
+            <td>${desc}</td>
+            <td>${info.quantita}</td>
+            <td>${info.totale.toFixed(2)} €</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+
+      html += '<div class="section-divider"></div>';
+
+      html += `<p><strong>Totale da pagare ora:</strong> 
+        <span class="value-red">€ ${totExtra.toFixed(2)}</span></p>`;
+
+      if (Array.isArray(cliente.extraDettaglio) && cliente.extraDettaglio.length > 0) {
+        const mappaE = {};
+        cliente.extraDettaglio.forEach(item => {
+          const key = item.descrizione || "Extra";
+          if (!mappaE[key]) {
+            mappaE[key] = { quantita: 0, totale: 0 };
+          }
+          mappaE[key].quantita += 1;
+          mappaE[key].totale += item.prezzo || 0;
+        });
+
+        html += '<table><thead><tr><th>Prodotto</th><th>Q.tà</th><th>Totale</th></tr></thead><tbody>';
+        Object.keys(mappaE).forEach(desc => {
+          const info = mappaE[desc];
+          html += `<tr>
+            <td>${desc}</td>
+            <td>${info.quantita}</td>
+            <td>${info.totale.toFixed(2)} €</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      }
+
+      riepilogoContainer.innerHTML = html;
+
+      if (btnConsumaProdotto) {
+        btnConsumaProdotto.disabled = totAvanzateQ <= 0;
+      }
+    }
+
+    function computeStoricoCliente(nome) {
+      const dates = getAllSavedDates();
+      const rows = [];
+      let totalCredQ = 0;
+      let totalCredVal = 0;
+      let totalDebito = 0;
+
+      dates.forEach(dateStr => {
+        const raw = localStorage.getItem(getStoragePrefix() + dateStr);
+        if (!raw) return;
+        let state;
+        try {
+          state = JSON.parse(raw);
+        } catch {
+          return;
+        }
+        const listaClienti = Array.isArray(state.clienti) ? state.clienti.map(normalizeCliente) : [];
+        const cli = listaClienti.find(c => c.nome === nome);
+        if (!cli) return;
+
+        let credQ = 0;
+        let credVal = 0;
+        if (Array.isArray(cli.avanzate)) {
+          cli.avanzate.forEach(e => {
+            const q = e.quantita || 0;
+            const v = e.prezzoUnitario || 0;
+            credQ += q;
+            credVal += q * v;
+          });
+        }
+
+        let debito = 0;
+        if (Array.isArray(cli.extraDettaglio)) {
+          debito = cli.extraDettaglio.reduce((s, x) => s + (x.prezzo || 0), 0);
+        }
+
+        totalCredQ += credQ;
+        totalCredVal += credVal;
+        totalDebito += debito;
+
+        rows.push({
+          data: dateStr,
+          credQ,
+          credVal,
+          debito
+        });
+      });
+
+      return { rows, totalCredQ, totalCredVal, totalDebito };
+    }
+
+    function mostraStoricoCliente(nome) {
+      const nomeTrim = (nome || "").trim();
+      if (!nomeTrim) {
+        storicoClienteContent.innerHTML = "<span class='small'>Inserisci un nome per vedere lo storico.</span>";
+        return;
+      }
+
+      const { rows, totalCredQ, totalCredVal, totalDebito } = computeStoricoCliente(nomeTrim);
+
+      if (rows.length === 0) {
+        storicoClienteContent.innerHTML = "<span class='small'>Nessun dato salvato per questo cliente.</span>";
+        return;
+      }
+
+      let html = `<div class="small"><strong>${nomeTrim}</strong></div>`;
+
+      html += `
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Crediti</th>
+              <th>Da pagare</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      rows.forEach(r => {
+        html += `
+          <tr>
+            <td>
+              ${r.data}
+              <button type="button"
+                      class="storico-apri-btn"
+                      data-date="${r.data}"
+                      data-nome="${nomeTrim}">
+                APRI
+              </button>
+            </td>
+            <td>${r.credQ} (€ ${r.credVal.toFixed(2)})</td>
+            <td>€ ${r.debito.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+
+      html += `
+        <div class="storico-totali">
+          <div><strong>Totale crediti residui:</strong> ${totalCredQ} (≈ € ${totalCredVal.toFixed(2)})</div>
+          <div><strong>Totale ancora da pagare:</strong> € ${totalDebito.toFixed(2)}</div>
+        </div>
+      `;
+
+      storicoClienteContent.innerHTML = html;
+
+      storicoClienteContent.querySelectorAll(".storico-apri-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const date = btn.getAttribute("data-date");
+          const nomeCli = btn.getAttribute("data-nome");
+          if (!date || !nomeCli) return;
+
+          dataGiornataInput.value = date;
+          initDay(date);
+
+          const cli = trovaClientePerNome(nomeCli);
+          if (cli) {
+            currentClienteId = cli.id;
+            resetCampiUI();
+            mostraDettaglioCliente(cli);
+          } else {
+            cardDettaglioCliente.style.display = "none";
+          }
+        });
+      });
+    }
+
+    function initDay(dateStr) {
+      loadStateForDate(dateStr);
+      aggiornaProdottoSelects();
+      resetCampiUI();
+      mostraDettaglioCliente(null);
+      aggiornaListaClienti();
+    }
+
+    // storico: parte chiuso
+    let storicoVisibile = false;
+    function aggiornaVisibilitaStorico() {
+      if (!storicoCard || !toggleStoricoBtn) return;
+      if (storicoVisibile) {
+        storicoCard.style.display = "block";
+        toggleStoricoBtn.classList.add("open");
+      } else {
+        storicoCard.style.display = "none";
+        toggleStoricoBtn.classList.remove("open");
+      }
+    }
+
+    toggleStoricoBtn.addEventListener("click", () => {
+      storicoVisibile = !storicoVisibile;
+      aggiornaVisibilitaStorico();
+    });
+
+    
+    if (resetDayBtn) {
+      resetDayBtn.addEventListener("click", () => {
+        const conferma = confirm(
+          "AZZERA GIORNATA\n\n" +
+          "Questo cancellerà tutte le schede, conti e storico SOLO per la giornata corrente.\n" +
+          "Sei sicuro di voler continuare?"
+        );
+        if (!conferma) return;
+
+        const giornoCorrente = currentDateStr || (dataGiornataInput && dataGiornataInput.value) || getTodayISO();
+        const key = getStoragePrefix() + giornoCorrente;
+        localStorage.removeItem(key);
+
+        initDay(giornoCorrente);
+        aggiornaVisibilitaStorico();
+        setStatusMessage("La giornata corrente è stata azzerata.", "ok");
+      });
+    }
+
+
+    (function init() {
+      const today = getTodayISO();
+      dataGiornataInput.value = today;
+      initDay(today);
+      aggiornaVisibilitaStorico();
+    })();
+
+    dataGiornataInput.addEventListener("change", () => {
+      const val = dataGiornataInput.value || getTodayISO();
+      initDay(val);
+    });
+
+    btnAggiungiCliente.addEventListener("click", () => {
+      const nome = nomeClienteInput.value.trim();
+      if (!nome) {
+        alert("Inserisci un nome per il cliente.");
+        return;
+      }
+
+      const cliente = creaCliente(nome);
+      nomeClienteInput.value = "";
+      aggiornaProdottoSelects();
+      currentClienteId = cliente.id;
+      resetCampiUI();
+      mostraDettaglioCliente(cliente);
+    });
+
+    btnConsumaProdotto.addEventListener("click", async () => {
+      const cliente = trovaCliente(currentClienteId);
+      if (!cliente) {
+        alert("Seleziona prima un cliente (aprendo la scheda).");
+        return;
+      }
+
+      const val = consumaProdottoSelect.value;
+      if (!val) {
+        alert("Seleziona cosa vuole consumare.");
+        return;
+      }
+
+      let res = { usato: false };
+
+      if (val.startsWith("birra:")) {
+        const misura = val.split(":")[1];
+        res = await consumaDaCreditoAsync(cliente, "birra", misura);
+      } else if (val.startsWith("extra:")) {
+        const idx = parseInt(val.split(":")[1], 10);
+        const articolo = extraArticoli[idx];
+        if (!articolo) {
+          alert("Prodotto extra non valido.");
+          return;
+        }
+        res = await consumaDaCreditoAsync(cliente, "extra", articolo.nome);
+      }
+
+      if (res.usato) {
+        setStatusMessage(`Consumazione scalata dal credito offerto da ${res.from}.`, "ok");
+      } else {
+        setStatusMessage("Nessuna consumazione avanzata di questo tipo da scalare.", "error");
+      }
+
+      aggiornaRiepilogo(cliente);
+      aggiornaListaClienti();
+    });
+
+    btnConfermaOfferta.addEventListener("click", () => {
+      const payer = trovaCliente(currentClienteId);
+      if (!payer) {
+        alert("Seleziona prima il cliente che offre (aprendo la scheda).");
+        return;
+      }
+
+      let destinatarioNome = offreANomeInput.value.trim();
+      if (destinatarioNome === "") destinatarioNome = null;
+
+      const val = offreProdottoSelect.value;
+      if (!val) {
+        alert("Seleziona cosa vuole offrire.");
+        return;
+      }
+
+      // Se NON c'è destinatario: comportamento originale
+      if (!destinatarioNome) {
+        if (val.startsWith("birra:")) {
+          const misura = val.split(":")[1];
+          registraOffertaBirra(payer, null, misura);
+          aggiornaRiepilogo(payer);
+        } else if (val.startsWith("extra:")) {
+          const idx = parseInt(val.split(":")[1], 10);
+          const articolo = extraArticoli[idx];
+          if (!articolo) {
+            alert("Prodotto extra non valido.");
+            return;
+          }
+          registraOffertaExtra(payer, null, articolo.nome, articolo.prezzo);
+          aggiornaRiepilogo(payer);
+        }
+
+        offreANomeInput.value = "";
+        setStatusMessage("Offerta registrata.", "ok");
+        return;
+      }
+
+      // Se c'è un destinatario: chiedi come registrare l'offerta
+      if (!offerChoiceModalOverlay || !offerOnlyBtn || !offerBothBtn || !offerCancelBtn) {
+        // fallback di sicurezza: comportamento classico
+        if (val.startsWith("birra:")) {
+          const misura = val.split(":")[1];
+          registraOffertaBirra(payer, destinatarioNome, misura);
+          aggiornaRiepilogo(payer);
+        } else if (val.startsWith("extra:")) {
+          const idx = parseInt(val.split(":")[1], 10);
+          const articolo = extraArticoli[idx];
+          if (!articolo) {
+            alert("Prodotto extra non valido.");
+            return;
+          }
+          registraOffertaExtra(payer, destinatarioNome, articolo.nome, articolo.prezzo);
+          aggiornaRiepilogo(payer);
+        }
+        offreANomeInput.value = "";
+        setStatusMessage("Offerta registrata.", "ok");
+        return;
+      }
+
+      // Apri modal compatta
+      offerChoiceModalOverlay.style.display = "flex";
+
+      const chiudiModal = () => {
+        offerChoiceModalOverlay.style.display = "none";
+      };
+
+      // Solo conto da pagare (nessuna avanzata)
+      offerOnlyBtn.onclick = () => {
+        if (val.startsWith("birra:")) {
+          const misura = val.split(":")[1];
+          const prezzo = PREZZI_BIRRA[misura];
+          if (!prezzo) {
+            alert("Misura birra non valida.");
+            chiudiModal();
+            return;
+          }
+          const baseDescr = `Birra ${misura.replace(".", ",")} L`;
+          const descrPayer = `${baseDescr} (offerta a ${destinatarioNome})`;
+          aggiungiAlContoExtra(payer, prezzo, descrPayer);
+        } else if (val.startsWith("extra:")) {
+          const idx = parseInt(val.split(":")[1], 10);
+          const articolo = extraArticoli[idx];
+          if (!articolo) {
+            alert("Prodotto extra non valido.");
+            chiudiModal();
+            return;
+          }
+          const descrPayer = `${articolo.nome} (offerto a ${destinatarioNome})`;
+          aggiungiAlContoExtra(payer, articolo.prezzo, descrPayer);
+        }
+
+        aggiornaRiepilogo(payer);
+        setStatusMessage("Offerta registrata solo al conto da pagare.", "ok");
+        offreANomeInput.value = "";
+        chiudiModal();
+      };
+
+      // Conto + avanzate del destinatario (comportamento classico)
+      offerBothBtn.onclick = () => {
+        if (val.startsWith("birra:")) {
+          const misura = val.split(":")[1];
+          registraOffertaBirra(payer, destinatarioNome, misura);
+        } else if (val.startsWith("extra:")) {
+          const idx = parseInt(val.split(":")[1], 10);
+          const articolo = extraArticoli[idx];
+          if (!articolo) {
+            alert("Prodotto extra non valido.");
+            chiudiModal();
+            return;
+          }
+          registraOffertaExtra(payer, destinatarioNome, articolo.nome, articolo.prezzo);
+        }
+
+        aggiornaRiepilogo(payer);
+        setStatusMessage("Offerta registrata su conto e avanzate.", "ok");
+        offreANomeInput.value = "";
+        chiudiModal();
+      };
+
+      offerCancelBtn.onclick = () => {
+        chiudiModal();
+      };
+    });
+
+    btnAggiungiNuovoExtra.addEventListener("click", () => {
+      const nome = nuovoExtraNome.value.trim();
+      let prezzo = parseFloat(nuovoExtraPrezzo.value.replace(",", "."));
+
+      if (!nome) {
+        setStatusMessage("Inserisci il nome del nuovo articolo.", "error");
+        return;
+      }
+
+      if (isNaN(prezzo) || prezzo <= 0) {
+        setStatusMessage("Inserisci un prezzo valido per il nuovo articolo.", "error");
+        return;
+      }
+
+      extraArticoli.push({ nome, prezzo });
+      saveState();
+      aggiornaProdottoSelects();
+
+      nuovoExtraNome.value = "";
+      nuovoExtraPrezzo.value = "";
+      setStatusMessage("Articolo aggiunto al listino.", "ok");
+    });
+
+    btnChiudiConto.addEventListener("click", () => {
+      const cliente = trovaCliente(currentClienteId);
+      if (!cliente) {
+        alert("Seleziona prima un cliente (aprendo la scheda).");
+        return;
+      }
+
+      let totAvanzateQ = 0;
+      let totAvanzateVal = 0;
+      if (Array.isArray(cliente.avanzate)) {
+        cliente.avanzate.forEach(entry => {
+          const q = entry.quantita || 0;
+          const v = entry.prezzoUnitario || 0;
+          totAvanzateQ += q;
+          totAvanzateVal += q * v;
+        });
+      }
+
+      let totExtra = 0;
+      if (Array.isArray(cliente.extraDettaglio)) {
+        totExtra = cliente.extraDettaglio.reduce((s, x) => s + (x.prezzo || 0), 0);
+      }
+
+      let reportAvanzate = "";
+      if (cliente.avanzate && cliente.avanzate.length > 0) {
+        const mappa = {};
+        cliente.avanzate.forEach(entry => {
+          const key = `${entry.descrizione} (da ${entry.from})`;
+          if (!mappa[key]) {
+            mappa[key] = { quantita: 0, totale: 0 };
+          }
+          mappa[key].quantita += entry.quantita || 0;
+          mappa[key].totale += (entry.quantita || 0) * (entry.prezzoUnitario || 0);
+        });
+
+        reportAvanzate += "Crediti residui (ancora da consumare):\n";
+        Object.keys(mappa).forEach(k => {
+          const info = mappa[k];
+          reportAvanzate += `- ${k}: ${info.quantita} (≈ € ${info.totale.toFixed(2)})\n`;
+        });
+      } else {
+        reportAvanzate = "Crediti residui: nessuno\n";
+      }
+
+      let reportExtra = "";
+      if (cliente.extraDettaglio && cliente.extraDettaglio.length > 0) {
+        const mappaExtra = {};
+        cliente.extraDettaglio.forEach(item => {
+          const key = item.descrizione || "Extra";
+          if (!mappaExtra[key]) {
+            mappaExtra[key] = { quantita: 0, totale: 0 };
+          }
+          mappaExtra[key].quantita += 1;
+          mappaExtra[key].totale += item.prezzo || 0;
+        });
+
+        reportExtra += "Dettaglio cosa deve pagare ORA:\n";
+        Object.keys(mappaExtra).forEach(desc => {
+          const info = mappaExtra[desc];
+          reportExtra += `- ${desc}: ${info.quantita} x ≈ € ${(info.totale / info.quantita).toFixed(2)} = € ${info.totale.toFixed(2)}\n`;
+        });
+      } else {
+        reportExtra = "Dettaglio conto: nessun prodotto registrato.\n";
+      }
+
+      const msg =
+        "REPORT CONTO\n\n" +
+        `Giorno: ${currentDateStr}\n` +
+        `Cliente: ${cliente.nome}\n\n` +
+        `Crediti residui: ${totAvanzateQ} (≈ € ${totAvanzateVal.toFixed(2)})\n` +
+        `Totale da pagare ORA: € ${totExtra.toFixed(2)}\n\n` +
+        reportExtra + "\n" +
+        reportAvanzate + "\n" +
+        "Confermi la chiusura del conto (solo importi da pagare)?";
+
+      const conferma = confirm(msg);
+
+      if (conferma) {
+        cliente.contoExtraEuro = 0;
+        cliente.extraDettaglio = [];
+        saveState();
+        aggiornaRiepilogo(cliente);
+        aggiornaListaClienti();
+        setStatusMessage(`Conto chiuso. Pagati € ${totExtra.toFixed(2)}.`, "ok");
+        rimuoviClienteSeVuoto(cliente);
+      }
+    });
+
+    btnSvuotaCliente.addEventListener("click", () => {
+      const cliente = trovaCliente(currentClienteId);
+      if (!cliente) {
+        alert("Seleziona prima un cliente (aprendo la scheda).");
+        return;
+      }
+
+      const conferma = confirm(
+        `SVUOTA SCHEDA\n\n` +
+        `Azzererai crediti, offerte e conto per:\n` +
+        `${cliente.nome}\n\n` +
+        `Data: ${currentDateStr}\n\n` +
+        `Sei sicuro di voler continuare?`
+      );
+
+      if (conferma) {
+        svuotaCliente(cliente);
+        aggiornaRiepilogo(cliente);
+        aggiornaAvanzate(cliente);
+        aggiornaListaClienti();
+        setStatusMessage(`Scheda azzerata per ${cliente.nome}.`, "ok");
+        rimuoviClienteSeVuoto(cliente);
+      }
+    });
+
+    btnUndoOfferta.addEventListener("click", () => {
+      const payer = trovaCliente(currentClienteId);
+      if (!payer) {
+        alert("Apri prima la scheda del cliente che ha fatto l’offerta.");
+        return;
+      }
+      openUndoOfferModal(payer);
+    });
+
+    storicoMostraBtn.addEventListener("click", () => {
+      mostraStoricoCliente(storicoNomeInput.value);
+    });
+
+    storicoNomeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") mostraStoricoCliente(storicoNomeInput.value);
+    });
+  </script>
+</body>
+</html>
